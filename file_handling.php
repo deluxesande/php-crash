@@ -22,37 +22,37 @@
 <?php
     if (isset($_POST['submit'])) {
         $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
-
-        if (!empty($_FILES['file']['name'])) {
-            $file_name = $_FILES['file']['name'];
-            $file_size = $_FILES['file']['size'];
-            $file_tmp_name = $_FILES['file']['tmp_name'];
-
-            $target_dir = "uploads/$file_name";
-
-            // File extension of uploaded file
-            $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
-            // $file_ext = explode(".", $file_name);
-            $file_ext = strtolower($file_ext);
-
-            // Check if file extension is allowed
-            if (in_array($file_ext, $allowed_ext)) {
-                if ($file_size <= 1_000_000) {
-                    move_uploaded_file($file_tmp_name, $target_dir);
-
-                    $message = "<p style='color: green'>File uploaded successfully</p>";
-                    echo $message;
+        try {
+            if (!empty($_FILES['file']['name'])) {
+                $file_name = $_FILES['file']['name'];
+                $file_size = $_FILES['file']['size'];
+                $file_tmp_name = $_FILES['file']['tmp_name'];
+    
+                $target_dir = "uploads/$file_name";
+    
+                // File extension of uploaded file
+                $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
+                // $file_ext = explode(".", $file_name);
+                $file_ext = strtolower($file_ext);
+    
+                // Check if file extension is allowed
+                if (in_array($file_ext, $allowed_ext)) {
+                    if ($file_size <= 1_000_000) {
+                        move_uploaded_file($file_tmp_name, $target_dir);
+    
+                        $message = "<p style='color: green'>File uploaded successfully</p>";
+                    } else {
+                        $message = "<p style='color: red'>File size too large</p>";
+                    }
                 } else {
-                    $message = "<p style='color: red'>File size too large</p>";
-                    echo $message;
+                    $message = "<p style='color: red'>File extension not allowed</p>";
                 }
             } else {
-                $message = "<p style='color: red'>File extension not allowed</p>";
+                $message = "<p style='color: red'>Please select a file</p>";
                 echo $message;
             }
-        } else {
-            $message = "<p style='color: red'>Please select a file</p>";
-            echo $message;
+        } catch (TypeError $e) {
+            echo $e->getMessage();
         }
     }
 
