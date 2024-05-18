@@ -29,8 +29,24 @@
     $user1 = new User("John Doe", "johndoe@gmail.com", "123456");
 
     // var_dump($user1);
-    echo $user1->get_email();
+    // echo $user1->get_email();
 
 
     // Inheritance
+    class Employee extends User {
+        public $title;
+
+        public function __construct($name, $email, $password, $title) {
+            parent::__construct($name, $email, $password);
+            $this->title = $title;
+        }
+
+        public function get_title() {
+            return $this->title;
+        }
+    }
+
+    $emp1 = new Employee("Sarah Doe", "sarah.doe@gmail.com", "123456", "Software Developer");
+
+    echo $emp1->get_title();
 ?>
